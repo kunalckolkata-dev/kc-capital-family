@@ -1,0 +1,30 @@
+KC CAPITAL FAMILY — Cloudflare Workers + D1
+
+This package upgrades the site from browser-only member storage to a central Cloudflare D1 database.
+
+FILES
+- public/index.html — current KC CAPITAL FAMILY landing page
+- src_worker.ts — API + static asset Worker
+- schema.sql — members table
+- wrangler.json — Cloudflare configuration
+
+SETUP
+1. Create a Cloudflare account.
+2. Create a D1 database named: kc-capital-family
+3. Copy the database ID into wrangler.json where it says REPLACE_WITH_YOUR_D1_DATABASE_ID.
+4. Run:
+   npx wrangler d1 execute kc-capital-family --remote --file=./schema.sql
+5. Deploy:
+   npx wrangler deploy
+6. Your Worker will provide the website and these APIs:
+   GET  /api/community
+   POST /api/register
+
+IMPORTANT
+The existing page still contains its browser-local registration/admin logic. The Worker API is now ready for central storage, but the page's form must be wired to /api/register and its community counter to /api/community before calling the public count "verified". Do not claim the public counter is central/verified until that connection is completed.
+
+SECURITY
+Do not store an admin password in frontend JavaScript/localStorage for a real production admin. Use Cloudflare Access or a server-side authentication system for the admin area before public launch.
+
+COMPLIANCE
+Before collecting public payments, clearly state what ₹100 purchases, refund/cancellation terms, business identity, privacy terms, and any reward/referral conditions. Do not describe payments as guaranteed returns, lottery entries, deposits, or guaranteed winnings.
